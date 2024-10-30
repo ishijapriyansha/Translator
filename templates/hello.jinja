@@ -15,36 +15,35 @@
                 <label for="current_language">Current Language:</label>
                 <select class="form-control" id="current_language" name="current_language" required>
                     <option value="">Select current language</option>
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="ja">Japanese</option>
-                    <option value="zh">Chinese</option>
-                  
+                    <option value="en" {% if current_language == 'en' %}selected{% endif %}>English</option>
+                    <option value="es" {% if current_language == 'es' %}selected{% endif %}>Spanish</option>
+                    <option value="fr" {% if current_language == 'fr' %}selected{% endif %}>French</option>
+                    <option value="de" {% if current_language == 'de' %}selected{% endif %}>Japanese</option>
+                    <option value="zh" {% if current_language == 'zh' %}selected{% endif %}>Chinese</option>
                 </select>
             </div>
+
             <div class="form-group">
                 <label for="text">Enter Text:</label>
-                <input type="text" class="form-control" id="text" name="text" placeholder="Enter the text to translate" required>
+                <input type="text" class="form-control" id="text" name="text" placeholder="Enter the text to translate" value="{{ input_text }}" required>
             </div>
-            
-           
+
             <div class="form-group">
                 <label for="target_language">Target Language:</label>
                 <select class="form-control" id="target_language" name="target_language" required>
                     <option value="">Select target language</option>
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="ja">Japanese</option>
-                    <option value="zh">Chinese</option>
-                  
+                    <option value="en" {% if target_language == 'en' %}selected{% endif %}>English</option>
+                    <option value="es" {% if target_language == 'es' %}selected{% endif %}>Spanish</option>
+                    <option value="fr" {% if target_language == 'fr' %}selected{% endif %}>French</option>
+                    <option value="de" {% if target_language == 'de' %}selected{% endif %}>Japanese</option>
+                    <option value="zh" {% if target_language == 'zh' %}selected{% endif %}>Chinese</option>
                 </select>
             </div>
-            
+
             <button type="submit" class="btn btn-primary">Translate</button>
         </form>
-        <div class="answer">
+        
+        <div class="answer mt-4">
             <label for="translated_text">Translated Text:</label>
             <p id="translated">{{ translated_text }}</p>
         </div>
