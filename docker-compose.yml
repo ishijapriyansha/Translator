@@ -1,0 +1,29 @@
+
+
+services:
+  web:
+    build: .  # Uses Dockerfile in current directory
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"  # Maps port 8000 on host to container
+    volumes:
+      - .:/app  # Mounts project files for live editing
+    environment:
+      - DEBUG=1  # Optional: Enables debug mode for Django
+    depends_on:
+      db:
+        condition: service_healthy  # Wait for the db to be healthy
+
+  db:
+    image: postgres:13  # Sets PostgreSQL version
+    environment:
+      POSTGRES_DB: django_db         # Name your database
+      POSTGRES_USER: django_user     # Name your database user
+      POSTGRES_PASSWORD: django_pass  # Set a database password
+    ports:
+      - "5432:5432"
+    healthcheck:  # Check if the db service is healthy
+      test: ["CMD-SHELL", "pg_isready -U django_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
