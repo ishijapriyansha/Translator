@@ -32,16 +32,13 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-            agent {
-                // Run this stage on a container with kubectl installed
-                docker {
-                    image 'bitnami/kubectl:latest'
-                    args '-v $HOME/.kube:/root/.kube'  // Mount kubeconfig if needed
-                }
-            }
             steps {
-                sh 'kubectl apply -f k8s/deployment.yaml'
-                sh 'kubectl apply -f k8s/service.yaml'
+                script {
+                    docker.image('bitnami/kubectl:latest').inside("-v $HOME/.kube:/root/.kube") {
+                        sh 'kubectl apply -f k8s/deployment.yaml'
+                        sh 'kubectl apply -f k8s/service.yaml'
+                    }
+                }
             }
         }
     }
