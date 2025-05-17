@@ -7,25 +7,27 @@ pipeline {
 
     stages {
         stage('Clone repo') {
-    steps {
-        git branch: 'main', url: 'https://github.com/ishijapriyansha/Translator.git'
-    }
-}
-
+            steps {
+                git branch: 'main', url: 'https://github.com/ishijapriyansha/Translator.git'
+            }
+        }
 
         stage('Build Docker image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                script {
+                    // Use double quotes to expand env var in sh on Linux agents
+                    sh "docker build -t ${DOCKER_IMAGE} ."
+                }
             }
         }
 
         stage('Push Docker image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh '''
+                    sh """
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push $DOCKER_IMAGE
-                    '''
+                        docker push ${DOCKER_IMAGE}
+                    """
                 }
             }
         }
