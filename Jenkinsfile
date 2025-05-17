@@ -7,10 +7,11 @@ pipeline {
 
     stages {
         stage('Clone repo') {
-            steps {
-                git 'https://github.com/ishijapriyansha/Translator.git'
-            }
-        }
+    steps {
+        git branch: 'main', url: 'https://github.com/ishijapriyansha/Translator.git'
+    }
+}
+
 
         stage('Build Docker image') {
             steps {
