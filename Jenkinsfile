@@ -15,7 +15,6 @@ pipeline {
         stage('Build Docker image') {
             steps {
                 script {
-                    // Use double quotes to expand env var in sh on Linux agents
                     sh "docker build -t ${DOCKER_IMAGE} ."
                 }
             }
@@ -33,6 +32,13 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
+            agent {
+                // Run this stage on a container with kubectl installed
+                docker {
+                    image 'bitnami/kubectl:latest'
+                    args '-v $HOME/.kube:/root/.kube'  // Mount kubeconfig if needed
+                }
+            }
             steps {
                 sh 'kubectl apply -f k8s/deployment.yaml'
                 sh 'kubectl apply -f k8s/service.yaml'
