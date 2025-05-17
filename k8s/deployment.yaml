@@ -6,14 +6,14 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: django
+      app: translator
   template:
     metadata:
       labels:
         app: translator
     spec:
       containers:
-        - name: django
+        - name: translator
           image: ishijapriyansha/translator
           ports:
             - containerPort: 8000
