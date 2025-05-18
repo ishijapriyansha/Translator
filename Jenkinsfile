@@ -34,7 +34,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    docker.image('bitnami/kubectl:latest').inside("-v $HOME/.kube:/root/.kube") {
+                    docker.image('bitnami/kubectl:latest').inside("--entrypoint='' -v $HOME/.kube:/root/.kube") {
                         sh 'kubectl apply -f k8s/deployment.yaml'
                         sh 'kubectl apply -f k8s/service.yaml'
                     }
