@@ -32,17 +32,18 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-    steps {
-        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
-            script {
-                docker.image('bitnami/kubectl:latest').inside("-v ${KUBECONFIG_FILE}:/root/.kube/config:ro") {
-                    sh 'kubectl apply -f k8s/deployment.yaml'
-                    sh 'kubectl apply -f k8s/service.yaml'
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    script {
+                        withEnv(["KUBECONFIG=$KUBECONFIG_FILE"]) {
+                            docker.image('bitnami/kubectl:latest').inside("--entrypoint=''") {
+                                sh 'kubectl apply -f k8s/deployment.yaml'
+                                sh 'kubectl apply -f k8s/service.yaml'
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
     }
 }
